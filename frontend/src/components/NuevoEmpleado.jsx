@@ -95,7 +95,7 @@ const NuevoEmpleado = ({ onCreado }) => {
   `;
 
         try {
-            console.log('URL llamada:', `${API}/graphql`);
+            console.log('URL llamada:', API);
             const bodyData = JSON.stringify({
                 query: mutation,
                 variables: { input, extras: input.extras }
