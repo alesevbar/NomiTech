@@ -7,9 +7,9 @@ const path = require('path');
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
 const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-server-core');
-
+const corsMiddleware = require('./corsMiddleware');
 const app = express();
-app.use(cors());
+app.use(corsMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/sistema_nomina')
