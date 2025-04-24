@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const path = require('path');
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
@@ -10,24 +9,16 @@ const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-serve
 
 const app = express();
 
-const corsOpts = {
-  origin: 'https://nomitech-frontend.onrender.com',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
-app.options('/graphql', cors(corsOpts));
-app.use('/graphql', cors(corsOpts));
-
-
+/* ───── Estáticos opcionales ───── */
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* ─────  MongoDB ───── */
+/* ───── MongoDB ───── */
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Conectado a MongoDB'))
   .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
-/* ─────  Apollo  ───── */
+/* ───── Apollo  ───── */
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,
@@ -38,7 +29,16 @@ async function startServer() {
 
   await server.start();
 
-  server.applyMiddleware({ app, path: '/graphql', cors: false });
+
+  server.applyMiddleware({
+    app,
+    path: '/graphql',
+    cors: {
+      origin: 'https://nomitech-frontend.onrender.com',
+      methods: ['GET', 'POST', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization']
+    }
+  });
 
   const port = process.env.PORT || 4000;
   app.listen(port, () =>
