@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
@@ -13,30 +13,36 @@ const {
 
 const app = express();
 
-/* ──────────  Habilitar CORS para todo  ────────── */
-app.use(
-  cors({
-    origin: 'https://nomitech-frontend.onrender.com',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-  })
-);
+/* ─── 1. CORS global (origins abiertos para depurar) ─── */
+app.use(cors({ origin: 'https://nomitech-frontend.onrender.com' }));
+app.use(express.json());
 
-/* ──────────  Servir estáticos (opcional)  ────────── */
+/* ─── 2. Logger: muestra método, url y body ─── */
+app.use('/graphql', (req, res, next) => {
+  console.log('📩  ', req.method, req.originalUrl);
+  if (req.body) console.dir(req.body, { depth: null });
+  next();
+});
+
+/* ─── Estáticos opcionales ─── */
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* ──────────  Conexión MongoDB  ────────── */
+/* ─── MongoDB ─── */
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Conectado a MongoDB'))
   .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
-/* ──────────  Apollo Server  ────────── */
+/* ─── Apollo ─── */
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     introspection: true,
+    formatError: (err) => {
+      console.error('🚨 GraphQL error:', err.message);
+      return err;
+    },
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground()]
   });
 
