@@ -1,0 +1,148 @@
+.nuevo-empleado-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: #333;
+    text-align: center;
+}
+
+.form-nuevo {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.2rem;
+}
+
+.input-label {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    color: #333;
+}
+
+.input-field {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.input-field::placeholder {
+    color: #888;
+}
+
+.input-field:focus {
+    border-color: #007BFF;
+}
+
+/* errores */
+.error-msg {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+.input-error {
+    border-color: #dc3545 !important;
+}
+
+/* sección extras */
+.extras-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.subheading {
+    font-size: 1.25rem;
+    margin: 0;
+    color: #555;
+}
+
+.extra-pair {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.extra-input {
+    flex: 1;
+}
+
+.btn-add,
+.btn-create,
+.btn-remove {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.btn-add {
+    background-color: #28a745;
+    color: #fff;
+    align-self: start;
+}
+
+.btn-add:hover {
+    background-color: #218838;
+}
+
+.btn-create {
+    background-color: #007BFF;
+    color: #fff;
+    width: 100%;
+    padding: 0.75rem;
+}
+
+.btn-create:hover {
+    background-color: #0069d9;
+}
+
+.btn-remove {
+    background-color: #dc3545;
+    color: #fff;
+    font-weight: bold;
+    padding: 0.4rem 0.7rem;
+}
+
+.btn-remove:hover {
+    background-color: #c82333;
+}
+
+.currency-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.currency-input-group .input-field {
+    flex: 1;
+}
+
+.currency-select {
+
+    width: 1.5rem;
+    text-align: center;
+}
+
+
+.currency-select:focus {
+    border-color: #007BFF;
+}

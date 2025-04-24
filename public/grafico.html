@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Historial Salarial</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <h2>📈 Evolución del salario</h2>
+    <canvas id="graficoSalario" width="800" height="400"></canvas>
+
+    <script>
+        const empleadoId = "67ba7485271ce96dcf84cfe9";
+
+        async function obtenerHistorial() {
+            try {
+                const response = await fetch("http://localhost:4000/graphql", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        query: `
+          query {
+            verHistorial(id: "${empleadoId}") {
+              desde
+              salarioBase
+            }
+          }
+        `
+                    })
+                });
+
+                const result = await response.json();
+                console.log("Respuesta GraphQL:", result);
+
+                const historial = (result.data.verHistorial || []).filter(e => e.salarioBase != null);
+
+                if (historial.length === 0) {
+                    alert("Este empleado aún no tiene historial salarial.");
+                    return;
+                }
+
+                const labels = historial.map(h => new Date(h.desde).toLocaleDateString());
+                const dataPoints = historial.map(h => h.salarioBase);
+
+                const ctx = document.getElementById('graficoSalario').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Salario base',
+                            data: dataPoints,
+                            borderColor: 'blue',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error al obtener el historial:", error);
+            }
+        }
+
+        obtenerHistorial();
+    </script>
+</body>
+
+</html>

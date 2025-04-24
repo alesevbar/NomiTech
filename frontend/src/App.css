@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #e0f7fa, #80deea, #4dd0e1);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+  font-family: 'Arial', sans-serif;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.app-wrapper {
+  padding: 0.5rem;
+  min-height: 100vh;
+  background: transparent;
+}
+
+.panel {
+  margin-top: 0.25rem;
+}
+
+.logo-container {
+  margin: 0.3rem 0;
+  text-align: center;
+}
+
+.logo-img {
+  max-width: 120px;
+  height: auto;
+}
+
+h1,
+.app-title {
+  margin: 0;
+  padding: 0;
+  font-size: 1.25rem;
+  text-align: center;
+}

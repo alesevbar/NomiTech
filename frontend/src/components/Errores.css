@@ -1,0 +1,12 @@
+.error-msg {
+    color: #ff4d4d;
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0.75rem 0;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.input-error {
+    border: 1px solid #ff4d4d;
+    background-color: #fff0f0;
+}

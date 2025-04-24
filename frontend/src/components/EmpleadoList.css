@@ -1,0 +1,192 @@
+.empleado-list-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.list-header h2 {
+    font-size: 1.75rem;
+    color: #333;
+}
+
+.btn-nuevo {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-nuevo:hover {
+    background-color: #333;
+}
+
+.empleado-list-main {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+}
+
+.filtros-panel {
+    background: #fafafa;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 1rem;
+}
+
+.filtros-panel h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.filtros-panel * {
+    box-sizing: border-box;
+}
+
+.filtros input,
+.filtros select {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.filtros-rango {
+    margin-bottom: 1rem;
+}
+
+.filtros-rango label {
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.rc-slider {
+    margin: 0.3rem 0 1rem 0;
+    height: 24px;
+}
+
+.rc-slider-rail {
+    height: 4px;
+    background: #e0e0e0;
+}
+
+.rc-slider-track {
+    height: 4px;
+    background: orange;
+}
+
+.rc-slider-handle {
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+    border: 2px solid orange;
+    background: #fff;
+    cursor: pointer;
+}
+
+.rc-slider-handle:hover {
+    border-color: darkorange;
+}
+
+.rc-slider-handle:focus {
+    box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.3);
+}
+
+.empleado-list-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.empleado-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.empleado-list li {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.empleado-list li:last-child {
+    border-bottom: none;
+}
+
+.empleado-list li span {
+    flex: 1;
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.empleado-list li span:hover {
+    text-decoration: underline;
+}
+
+.btn-eliminar-inline {
+    background: transparent;
+    border: none;
+    color: #c00;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+}
+
+.btn-eliminar-inline:hover {
+    color: darkred;
+}
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+    gap: 1rem;
+}
+
+.paginacion button {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.paginacion button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.paginacion button:not(:disabled):hover {
+    background: #000;
+}
+
+.info-pagina {
+    font-size: 0.9rem;
+    color: #555;
+}
