@@ -94,16 +94,22 @@ const NuevoEmpleado = ({ onCreado }) => {
     }
   `;
 
-
         try {
+            console.log('URL llamada:', `${API}/graphql`);
+
+            const bodyData = JSON.stringify({
+                query: mutation,
+                variables: { input, extras: input.extras }
+            });
+
+            console.log('Body enviado:', bodyData);
+
             const res = await fetch(`${API}/graphql`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    query: mutation,
-                    variables: { input, extras: input.extras }
-                })
+                body: bodyData
             });
+
             const { data, errors } = await res.json();
 
             if (errors) {
@@ -124,115 +130,114 @@ const NuevoEmpleado = ({ onCreado }) => {
             console.error(err);
             alert('❌ Error de red al crear empleado');
         }
+
+
+        return (
+            <div className="nuevo-empleado-container">
+                <h3 className="heading">➕ Nuevo Empleado</h3>
+                <form noValidate onSubmit={handleSubmit} className="form-nuevo">
+                    <div className="form-group">
+                        <label className="input-label">Nombre y Apellidos:</label>
+                        <input
+                            type="text"
+                            className={`input-field ${errores.nombre ? 'input-error' : ''}`}
+                            placeholder="Nombre y Apellidos"
+                            value={nombre}
+                            onChange={e => setNombre(e.target.value)}
+                        />
+                        {errores.nombre && <p className="error-msg">{errores.nombre}</p>}
+                    </div>
+
+                    <div className="form-group">
+                        <label className="input-label">Tipo de contrato:</label>
+                        <select
+                            className="input-field"
+                            value={tipo}
+                            onChange={e => setTipo(e.target.value)}
+                        >
+                            <option value="asalariado">Asalariado</option>
+                            <option value="por_horas">Por horas</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label className="input-label">
+                            {tipo === 'asalariado' ? 'Salario Base:' : 'Pago por Hora:'}
+                        </label>
+                        <input
+                            type="text"
+                            inputMode="decimal"
+                            pattern="[0-9]+([,\.][0-9]{1,2})?"
+                            className={`input-field ${tipo === 'asalariado'
+                                ? (errores.salarioBase ? 'input-error' : '')
+                                : (errores.pagoPorHora ? 'input-error' : '')
+                                }`}
+                            placeholder="547,45 EUR"
+                            value={tipo === 'asalariado' ? salarioBase : pagoPorHora}
+                            onChange={e => {
+                                const v = e.target.value;
+                                tipo === 'asalariado'
+                                    ? setSalarioBase(v)
+                                    : setPagoPorHora(v);
+                            }}
+                        />
+
+                        {tipo === 'asalariado' && errores.salarioBase && (
+                            <p className="error-msg">{errores.salarioBase}</p>
+                        )}
+                        {tipo !== 'asalariado' && errores.pagoPorHora && (
+                            <p className="error-msg">{errores.pagoPorHora}</p>
+                        )}
+                    </div>
+
+                    <div className="form-group">
+                        <label className="input-label">Vacaciones (días):</label>
+                        <input
+                            type="number"
+                            className={`input-field ${errores.vacaciones ? 'input-error' : ''}`}
+                            placeholder="Vacaciones (días)"
+                            value={vacaciones}
+                            onChange={e => setVacaciones(e.target.value)}
+                        />
+                        {errores.vacaciones && <p className="error-msg">{errores.vacaciones}</p>}
+                    </div>
+
+                    <div className="extras-section">
+                        <h4 className="subheading">🔧 Extras</h4>
+                        {extras.map((ex, i) => (
+                            <div key={i} className="extra-pair">
+                                <input
+                                    type="text"
+                                    className="input-field extra-input"
+                                    placeholder="Ej: País"
+                                    value={ex.clave}
+                                    onChange={e => actualizarExtra(i, 'clave', e.target.value)}
+                                />
+                                <input
+                                    type="text"
+                                    className="input-field extra-input"
+                                    placeholder="Ej: España"
+                                    value={ex.valor}
+                                    onChange={e => actualizarExtra(i, 'valor', e.target.value)}
+                                />
+                                <button
+                                    type="button"
+                                    className="btn-remove"
+                                    onClick={() => eliminarExtra(i)}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        ))}
+                        <button type="button" className="btn-add" onClick={añadirExtra}>
+                            ➕ Añadir extra
+                        </button>
+                    </div>
+
+                    <button type="submit" className="btn-create">Crear</button>
+                </form>
+            </div>
+        );
     };
 
-
-    return (
-        <div className="nuevo-empleado-container">
-            <h3 className="heading">➕ Nuevo Empleado</h3>
-            <form noValidate onSubmit={handleSubmit} className="form-nuevo">
-                <div className="form-group">
-                    <label className="input-label">Nombre y Apellidos:</label>
-                    <input
-                        type="text"
-                        className={`input-field ${errores.nombre ? 'input-error' : ''}`}
-                        placeholder="Nombre y Apellidos"
-                        value={nombre}
-                        onChange={e => setNombre(e.target.value)}
-                    />
-                    {errores.nombre && <p className="error-msg">{errores.nombre}</p>}
-                </div>
-
-                <div className="form-group">
-                    <label className="input-label">Tipo de contrato:</label>
-                    <select
-                        className="input-field"
-                        value={tipo}
-                        onChange={e => setTipo(e.target.value)}
-                    >
-                        <option value="asalariado">Asalariado</option>
-                        <option value="por_horas">Por horas</option>
-                    </select>
-                </div>
-
-                <div className="form-group">
-                    <label className="input-label">
-                        {tipo === 'asalariado' ? 'Salario Base:' : 'Pago por Hora:'}
-                    </label>
-                    <input
-                        type="text"
-                        inputMode="decimal"
-                        pattern="[0-9]+([,\.][0-9]{1,2})?"
-                        className={`input-field ${tipo === 'asalariado'
-                            ? (errores.salarioBase ? 'input-error' : '')
-                            : (errores.pagoPorHora ? 'input-error' : '')
-                            }`}
-                        placeholder="547,45 EUR"
-                        value={tipo === 'asalariado' ? salarioBase : pagoPorHora}
-                        onChange={e => {
-                            const v = e.target.value;
-                            tipo === 'asalariado'
-                                ? setSalarioBase(v)
-                                : setPagoPorHora(v);
-                        }}
-                    />
-
-                    {tipo === 'asalariado' && errores.salarioBase && (
-                        <p className="error-msg">{errores.salarioBase}</p>
-                    )}
-                    {tipo !== 'asalariado' && errores.pagoPorHora && (
-                        <p className="error-msg">{errores.pagoPorHora}</p>
-                    )}
-                </div>
-
-                <div className="form-group">
-                    <label className="input-label">Vacaciones (días):</label>
-                    <input
-                        type="number"
-                        className={`input-field ${errores.vacaciones ? 'input-error' : ''}`}
-                        placeholder="Vacaciones (días)"
-                        value={vacaciones}
-                        onChange={e => setVacaciones(e.target.value)}
-                    />
-                    {errores.vacaciones && <p className="error-msg">{errores.vacaciones}</p>}
-                </div>
-
-                <div className="extras-section">
-                    <h4 className="subheading">🔧 Extras</h4>
-                    {extras.map((ex, i) => (
-                        <div key={i} className="extra-pair">
-                            <input
-                                type="text"
-                                className="input-field extra-input"
-                                placeholder="Ej: País"
-                                value={ex.clave}
-                                onChange={e => actualizarExtra(i, 'clave', e.target.value)}
-                            />
-                            <input
-                                type="text"
-                                className="input-field extra-input"
-                                placeholder="Ej: España"
-                                value={ex.valor}
-                                onChange={e => actualizarExtra(i, 'valor', e.target.value)}
-                            />
-                            <button
-                                type="button"
-                                className="btn-remove"
-                                onClick={() => eliminarExtra(i)}
-                            >
-                                ×
-                            </button>
-                        </div>
-                    ))}
-                    <button type="button" className="btn-add" onClick={añadirExtra}>
-                        ➕ Añadir extra
-                    </button>
-                </div>
-
-                <button type="submit" className="btn-create">Crear</button>
-            </form>
-        </div>
-    );
-};
-
-export default NuevoEmpleado;
+    export default NuevoEmpleado;
