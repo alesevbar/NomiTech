@@ -14,7 +14,7 @@ const resolvers = require('./graphql/resolvers');
 const app = express();
 
 /* ───────────── 0. CORS para preflight de /graphql ───────────── */
-app.options('/graphql', cors({ origin: 'https://nomitech-frontend.onrender.com' }));
+app.options('*', cors());
 
 /* ───────────── 1. Middleware global ───────────── */
 app.use(cors({ origin: 'https://nomitech-frontend.onrender.com' }));
