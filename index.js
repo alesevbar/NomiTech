@@ -1,57 +1,53 @@
 require('dotenv').config();
 const express = require('express');
-const { ApolloServer, gql } = require('apollo-server-express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-
-const typeDefs = require('./graphql/typeDefs');
-const resolvers = require('./graphql/resolvers');
+const mongoose = require('mongoose');
+const { ApolloServer } = require('apollo-server-express');
 const {
   ApolloServerPluginLandingPageGraphQLPlayground
 } = require('apollo-server-core');
 
+const typeDefs = require('./graphql/typeDefs');
+const resolvers = require('./graphql/resolvers');
+
 const app = express();
 
-/* ─── 1. CORS global (origins abiertos para depurar) ─── */
-app.use(cors({ origin: 'https://nomitech-frontend.onrender.com' }));
-app.use(express.json());
+/* ───────────── 1. Middleware global ───────────── */
+app.use(cors({ origin: 'https://nomitech-frontend.onrender.com' })); // pon '*' si quieres abrir a todos
+app.use(express.json());                                             // para leer req.body
 
-/* ─── 2. Logger: muestra método, url y body ─── */
-app.use('/graphql', (req, res, next) => {
-  console.log('📩  ', req.method, req.originalUrl);
+/* ───────────── 2. Logger de peticiones /graphql ───────────── */
+app.use('/graphql', (req, _res, next) => {
+  console.log('📩 ', req.method, req.originalUrl);
   if (req.body) console.dir(req.body, { depth: null });
   next();
 });
 
-/* ─── Estáticos opcionales ─── */
+/* ───────────── 3. Servir estáticos (opcional) ───────────── */
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* ─── MongoDB ─── */
+/* ───────────── 4. Conexión MongoDB ───────────── */
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Conectado a MongoDB'))
   .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
-/* ─── Apollo ─── */
+/* ───────────── 5. Apollo Server ───────────── */
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     introspection: true,
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
     formatError: (err) => {
       console.error('🚨 GraphQL error:', err.message);
       return err;
-    },
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()]
+    }
   });
 
   await server.start();
-  app.post('/graphql', (req, res, next) => {
-    console.log('>>>  POST /graphql recibido');
-    next();
-  });
-  server.applyMiddleware({ app, path: '/graphql' });
+  server.applyMiddleware({ app, path: '/graphql' }); // Apollo hereda CORS global
 
   const port = process.env.PORT || 4000;
   app.listen(port, () =>
