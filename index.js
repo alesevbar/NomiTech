@@ -13,9 +13,12 @@ const resolvers = require('./graphql/resolvers');
 
 const app = express();
 
+/* ───────────── 0. CORS para preflight de /graphql ───────────── */
+app.options('/graphql', cors({ origin: 'https://nomitech-frontend.onrender.com' }));
+
 /* ───────────── 1. Middleware global ───────────── */
-app.use(cors({ origin: 'https://nomitech-frontend.onrender.com' })); // pon '*' si quieres abrir a todos
-app.use(express.json());                                             // para leer req.body
+app.use(cors({ origin: 'https://nomitech-frontend.onrender.com' }));
+app.use(express.json());
 
 /* ───────────── 2. Logger de peticiones /graphql ───────────── */
 app.use('/graphql', (req, _res, next) => {
@@ -47,7 +50,7 @@ async function startServer() {
   });
 
   await server.start();
-  server.applyMiddleware({ app, path: '/graphql' }); // Apollo hereda CORS global
+  server.applyMiddleware({ app, path: '/graphql' });
 
   const port = process.env.PORT || 4000;
   app.listen(port, () =>
