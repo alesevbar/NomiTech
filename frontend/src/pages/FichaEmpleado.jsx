@@ -13,7 +13,7 @@ const FichaEmpleado = () => {
 
     useEffect(() => {
         const fetchEmpleado = async () => {
-            const res = await fetch(`${API}/graphql`, {
+            const res = await fetch(API, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -84,7 +84,7 @@ const FichaEmpleado = () => {
         }
       }
     `;
-        const res = await fetch('http://localhost:4000/graphql', {
+        const res = await fetch(API, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -140,7 +140,7 @@ const FichaEmpleado = () => {
                 }
             `;
 
-            await fetch('http://localhost:4000/graphql', {
+            await fetch(API, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: mutation })

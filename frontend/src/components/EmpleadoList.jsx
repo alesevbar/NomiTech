@@ -21,7 +21,7 @@ const EmpleadoList = ({ refresh }) => {
     useEffect(() => {
 
         const fetchEmpleados = async () => {
-            const res = await fetch(`${API}/graphql`, {
+            const res = await fetch(API, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -49,7 +49,7 @@ const EmpleadoList = ({ refresh }) => {
 
     const eliminarEmpleado = async (id) => {
         if (!window.confirm('¿Eliminar este empleado?')) return;
-        await fetch('http://localhost:4000/graphql', {
+        await fetch(API, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

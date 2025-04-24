@@ -12,7 +12,7 @@ const MediaSalarioChart = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch(`${API}/graphql`, {
+            const res = await fetch(API, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
