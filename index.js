@@ -17,7 +17,8 @@ const app = express();
 app.options('*', cors());
 
 /* ───────────── 1. Middleware global ───────────── */
-app.use(cors({ origin: 'https://nomitech-frontend.onrender.com' }));
+
+app.use(cors());
 app.use(express.json());
 
 /* ───────────── 2. Logger de peticiones /graphql ───────────── */
