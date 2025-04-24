@@ -10,7 +10,7 @@ const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-serve
 const corsMiddleware = require('./corsMiddleware');
 const app = express();
 app.use(corsMiddleware);
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/sistema_nomina')
   .then(() => console.log('✅ Conectado a MongoDB'))
@@ -24,7 +24,7 @@ async function startServer() {
   });
 
   await server.start();
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, path: '/graphql' });
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {

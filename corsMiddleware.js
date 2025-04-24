@@ -1,9 +1,10 @@
 const cors = require('cors');
 
 const corsOptions = {
-    origin: '*',
+    origin: 'https://nomitech-frontend.onrender.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
+    credentials: true
 };
 
 const corsMiddleware = cors(corsOptions);
