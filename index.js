@@ -47,6 +47,10 @@ async function startServer() {
   });
 
   await server.start();
+  app.post('/graphql', (req, res, next) => {
+    console.log('>>>  POST /graphql recibido');
+    next();
+  });
   server.applyMiddleware({ app, path: '/graphql' });
 
   const port = process.env.PORT || 4000;
