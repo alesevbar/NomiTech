@@ -7,12 +7,13 @@ const HistorialSalarioChart = ({ empleadoId }) => {
     const [tipoEmpleado, setTipoEmpleado] = useState('asalariado');
     const canvasRef = useRef(null);
     const chartRef = useRef(null);
+    const API = import.meta.env.VITE_API_URL
 
     useEffect(() => {
         if (!empleadoId) return;
 
         const obtenerHistorial = async () => {
-            const res = await fetch('http://localhost:4000/graphql', {
+            const res = await fetch(`${API}/graphql`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

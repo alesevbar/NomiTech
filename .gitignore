@@ -4,6 +4,3 @@
 # Archivos de build
 /dist
 /build
-
-# Configuración sensible
-.env

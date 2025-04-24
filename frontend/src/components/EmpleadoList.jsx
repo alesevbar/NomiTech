@@ -15,11 +15,13 @@ const EmpleadoList = ({ refresh }) => {
     const [rangoPorHora, setRangoPorHora] = useState([0, 100]);
     const [rangoVacaciones, setRangoVacaciones] = useState([0, 60]);
     const navigate = useNavigate();
+    const API = import.meta.env.VITE_API_URL || 'http://localhost:4000/graphql';
+
 
     useEffect(() => {
 
         const fetchEmpleados = async () => {
-            const res = await fetch('http://localhost:4000/graphql', {
+            const res = await fetch(`${API}/graphql`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

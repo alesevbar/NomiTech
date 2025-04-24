@@ -9,6 +9,7 @@ const NuevoEmpleado = ({ onCreado }) => {
     const [vacaciones, setVacaciones] = useState('');
     const [extras, setExtras] = useState([]);
     const [errores, setErrores] = useState({});
+    const API = import.meta.env.VITE_API_URL
 
     const añadirExtra = () => setExtras([...extras, { clave: '', valor: '' }]);
     const actualizarExtra = (i, c, v) =>
@@ -95,7 +96,7 @@ const NuevoEmpleado = ({ onCreado }) => {
 
 
         try {
-            const res = await fetch('http://localhost:4000/graphql', {
+            const res = await fetch(`${API}/graphql`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

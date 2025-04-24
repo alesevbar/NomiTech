@@ -8,10 +8,11 @@ const MediaSalarioChart = () => {
     const chartNomina = useRef(null);
     const chartHoras = useRef(null);
     const navigate = useNavigate();
+    const API = import.meta.env.VITE_API_URL || 'http://localhost:4000/graphql';
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch('http://localhost:4000/graphql', {
+            const res = await fetch(`${API}/graphql`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
