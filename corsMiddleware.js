@@ -4,7 +4,7 @@ const corsOptions = {
     origin: 'https://nomitech-frontend.onrender.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     optionsSuccessStatus: 200,
-    credentials: true
+    credentials: false
 };
 
 const corsMiddleware = cors(corsOptions);
