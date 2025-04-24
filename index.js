@@ -4,15 +4,21 @@ const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
 const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-server-core');
 
 const app = express();
 
-app.use(cors());
-app.options('*', cors());
+app.use(
+  '/graphql',
+  cors({
+    origin: 'https://nomitech-frontend.onrender.com',
+    credentials: false
+  })
+);
+app.options('/graphql', cors());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose
@@ -33,10 +39,7 @@ async function startServer() {
   server.applyMiddleware({
     app,
     path: '/graphql',
-    cors: {
-      origin: 'https://nomitech-frontend.onrender.com',
-      credentials: false
-    }
+    cors: false
   });
 
   const port = process.env.PORT || 4000;
