@@ -6,16 +6,17 @@ const path = require('path');
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
 const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-server-core');
-const { corsMiddleware, corsOptionsHandler } = require('./corsMiddleware');
+const { corsOptions, corsMiddleware, corsOptionsHandler } = require('./corsMiddleware');
 
 const app = express();
 
-// ✅ CORS y OPTIONS
+/* CORS global + preflight */
 app.use(corsMiddleware);
 app.options('*', corsOptionsHandler);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+/* Mongo */
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/sistema_nomina')
   .then(() => console.log('✅ Conectado a MongoDB'))
   .catch(err => console.error('❌ Error conectando a MongoDB:', err));
@@ -25,16 +26,22 @@ async function startServer() {
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
-    persistedQueries: false  // Desactiva advertencia Apollo
+    persistedQueries: false          // adiós warning
   });
 
   await server.start();
-  server.applyMiddleware({ app, path: '/graphql' });
+
+  /* 👇 Aquí indicamos a Apollo que USE el mismo CORS */
+  server.applyMiddleware({
+    app,
+    path: '/graphql',
+    cors: corsOptions               // ⬅️ la clave
+  });
 
   const PORT = process.env.PORT || 4000;
-  app.listen(PORT, () => {
-    console.log(`🚀 Servidor en http://localhost:${PORT}${server.graphqlPath}`);
-  });
+  app.listen(PORT, () =>
+    console.log(`🚀 Servidor en http://localhost:${PORT}${server.graphqlPath}`)
+  );
 }
 
 startServer();
