@@ -1,45 +1,47 @@
+// index.js
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');                     // ← falta esta
 const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const path = require('path');
+
+const { corsOptions, corsMiddleware } = require('./corsMiddleware');
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
-const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-server-core');
-const { corsOptions, corsMiddleware } = require('./corsMiddleware');
 
-const app = express();                                // ← falta esta
+const app = express();
 
-/* CORS */
-app.use(corsMiddleware);                 // CORS normal
-app.options('/graphql', cors(corsOptions)); // pre-flight /graphql
+// Aplica CORS **antes** de cualquier ruta
+app.use(corsMiddleware);
 
+// Monta estáticos si los tienes
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* Mongo */
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/sistema_nomina')
+// Conecta a Mongo
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('✅ Conectado a MongoDB'))
-  .catch(err => console.error('❌ Error conectando a MongoDB:', err));
+  .catch(err => console.error(err));
 
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+    plugins: [ /* tu playground si quieres */],
     persistedQueries: false
   });
-
   await server.start();
+
+  // IMPORTANTE: deshabilita CORS de Apollo porque ya lo tienes con express
   server.applyMiddleware({
     app,
     path: '/graphql',
-    cors: corsOptions            // la clave
+    cors: false
   });
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () =>
-    console.log(`🚀 Servidor en http://localhost:${PORT}${server.graphqlPath}`));
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}${server.graphqlPath}`)
+  );
 }
 
 startServer();
