@@ -46,7 +46,7 @@ Este sistema de nómina centraliza la gestión de empleados, su tipo (asalariado
 Asegúrate de tener instalados los siguientes componentes:
 - Node.js y npm
 - Python 3
-- MariaDB 
+- MongoDB 
 
 ### Pasos de instalación
 
