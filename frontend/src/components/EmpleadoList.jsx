@@ -138,7 +138,7 @@ const EmpleadoList = ({ refresh }) => {
                                     range
                                     min={0}
                                     max={100}
-                                    step={0.5}
+                                    step={1}
                                     value={rangoPorHora}
                                     onChange={vals => { setRangoPorHora(vals); setPagina(1); }}
                                 />
